@@ -41,7 +41,6 @@ CREATE TABLE IF NOT EXISTS users_tenants (
                                              id UUID NOT NULL,
                                              db_name VARCHAR(255) NOT NULL,
     db_user_id UUID NOT NULL,
-    url VARCHAR(500) NOT NULL,
     user_name VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     driver_class VARCHAR(255) NOT NULL,
