@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: sellmotors-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: sellmotors
+      POSTGRES_PASSWORD: sellmotors
+      TZ: America/Sao_Paulo
+      PGTZ: America/Sao_Paulo
+    ports:
+      - "5432:5432"
+    volumes:
+      - sellmotors_postgres_data:/var/lib/postgresql/data
+      - ./init-multiple-databases.sh:/docker-entrypoint-initdb.d/init-multiple-databases.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sellmotors -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  sellmotors_postgres_data:

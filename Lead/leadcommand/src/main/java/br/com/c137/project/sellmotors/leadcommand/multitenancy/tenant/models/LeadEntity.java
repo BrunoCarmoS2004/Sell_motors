@@ -16,8 +16,8 @@ import java.util.UUID;
 @Table(name = "leads")
 public class LeadEntity extends BaseEntity{
 
-    @Column(nullable = false)
-    private UUID fullName;
+    @Column(nullable = false, name = "full_name")
+    private String fullName;
 
     @Column(nullable = false)
     private String email;

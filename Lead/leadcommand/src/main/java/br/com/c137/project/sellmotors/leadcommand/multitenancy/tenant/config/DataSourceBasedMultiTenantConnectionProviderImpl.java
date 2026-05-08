@@ -42,9 +42,6 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl
             .build();
 
     @Autowired
-    private UserTenantRepository userTenantRepository;
-
-    @Autowired
     @Qualifier("masterDataSource")
     private DataSource masterDataSource;
 
@@ -75,13 +72,7 @@ public class DataSourceBasedMultiTenantConnectionProviderImpl
             String tenant = (String) key;
             UUID dbUserId = UUID.fromString(tenant.replace(NOMEBANCO, ""));
 
-            UserTenant novoTenant = userTenantRepository.findByDbUserId(dbUserId);
-
-            if (novoTenant.getDatabaseStatus().equals(DatabaseStatus.NOT_CREATED)) {
-                throw new TenantSchemaNotReadyException("Database not ready for tenant: " + tenant);
-            }
-
-            return DataSourceUtil.createAndConfigureDataSource(novoTenant, ip, port);
+            return DataSourceUtil.createAndConfigureDataSource(dbUserId, ip, port);
         });
     }
 }

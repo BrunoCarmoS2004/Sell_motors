@@ -14,15 +14,12 @@ import java.util.UUID;
 @Service
 public class LeadServiceImpl implements LeadService {
 
-    @Autowired
-    private LeadRepository leadRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
+    private final LeadRepository leadRepository;
 
     private final MapperUtil<LeadEntity, LeadDto> mapperUtil;
 
-    public LeadServiceImpl() {
+    public LeadServiceImpl(LeadRepository leadRepository, ModelMapper modelMapper) {
+        this.leadRepository = leadRepository;
         this.mapperUtil = new MapperUtil<>(modelMapper, LeadEntity.class, LeadDto.class);
     }
 

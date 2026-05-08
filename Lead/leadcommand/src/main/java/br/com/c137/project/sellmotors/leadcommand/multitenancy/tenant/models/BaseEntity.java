@@ -18,10 +18,10 @@ public class BaseEntity {
     private UUID id;
 
     @CreationTimestamp
-    @Column
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }
