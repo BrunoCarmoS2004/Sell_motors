@@ -1,4 +1,4 @@
-package br.com.c137.project.sellmotors.authcommand.multitenancy.tenant.config;
+package br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.config;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.cfg.Environment;
@@ -21,23 +21,17 @@ import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
-//TODO COLOCAR DE VOLTA CASO DER ERRO!
-//@ComponentScan(basePackages = {
-//        "br.com.c137.project.sellmotors.authcommand.multitenancy.tenant.repositories",
-//        "br.com.c137.project.sellmotors.authcommand.multitenancy.tenant.models" })
-//@EnableJpaRepositories(basePackages = {
-//        "br.com.c137.project.sellmotors.authcommand.multitenancy.tenant.repositories",
-//        "br.com.c137.project.sellmotors.authcommand.services" },
-//        entityManagerFactoryRef = "tenantEntityManagerFactory",
-//        transactionManagerRef = "tenantTransactionManager")
-@ComponentScan(basePackages = {})
+@ComponentScan(basePackages = {
+        "br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.repositories",
+        "br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.models" })
 @EnableJpaRepositories(basePackages = {
-        "br.com.c137.project.sellmotors.authcommand.services"},
+        "br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.repositories",
+        "br.com.c137.project.sellmotors.leadcommand.services" },
         entityManagerFactoryRef = "tenantEntityManagerFactory",
         transactionManagerRef = "tenantTransactionManager")
 public class TenantDatabaseConfig {
 
-    @Bean(name = "tenantJpaVendorAdapter")
+	@Bean(name = "tenantJpaVendorAdapter")
     public JpaVendorAdapter jpaVendorAdapter() {
         return new HibernateJpaVendorAdapter();
     }
@@ -83,12 +77,12 @@ public class TenantDatabaseConfig {
     @ConditionalOnBean(name = "datasourceBasedMultitenantConnectionProvider")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             @Qualifier("datasourceBasedMultitenantConnectionProvider")
-            MultiTenantConnectionProvider connectionProvider,
+                    MultiTenantConnectionProvider connectionProvider,
             @Qualifier("currentTenantIdentifierResolver")
-            CurrentTenantIdentifierResolver tenantResolver) {
+                    CurrentTenantIdentifierResolver tenantResolver) {
         LocalContainerEntityManagerFactoryBean emfBean = new LocalContainerEntityManagerFactoryBean();
         //All tenant related entities, repositories and service classes must be scanned
-        emfBean.setPackagesToScan("br.com.c137.project.sellmotors.authcommand");
+        emfBean.setPackagesToScan("br.com.c137.project.sellmotors.leadcommand");
         emfBean.setJpaVendorAdapter(jpaVendorAdapter());
         emfBean.setPersistenceUnitName("tenantdb-persistence-unit");
         Map<String, Object> properties = new HashMap<>();
@@ -101,5 +95,5 @@ public class TenantDatabaseConfig {
         emfBean.setJpaPropertyMap(properties);
         return emfBean;
     }
-
+	
 }

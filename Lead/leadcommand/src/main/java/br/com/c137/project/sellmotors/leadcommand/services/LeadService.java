@@ -1,10 +1,12 @@
 package br.com.c137.project.sellmotors.leadcommand.services;
 
-import br.com.c137.project.sellmotors.leadcommand.dtos.LeadDto;
+import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.dtos.LeadDto;
+
+import java.util.UUID;
 
 public interface LeadService {
     LeadDto create(LeadDto dto);
     LeadDto update(LeadDto dto);
-    void deleteById(String id);
-    LeadDto getById(String id);
+    void deleteById(UUID id);
+    LeadDto getById(UUID id);
 }

@@ -1,9 +1,11 @@
 package br.com.c137.project.sellmotors.leadcommand.controllers;
 
-import br.com.c137.project.sellmotors.leadcommand.dtos.LeadDto;
+import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.dtos.LeadDto;
 import br.com.c137.project.sellmotors.leadcommand.services.LeadService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/leads")
@@ -26,7 +28,7 @@ public class LeadController {
     }
 
     @DeleteMapping("{id}")
-    ResponseEntity<Void> delete(@PathVariable String id) {
+    ResponseEntity<Void> delete(@PathVariable UUID id) {
         leadService.deleteById(id);
         return ResponseEntity.ok().build();
     }

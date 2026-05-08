@@ -1,21 +1,28 @@
 package br.com.c137.project.sellmotors.leadcommand.services.impl;
 
-import br.com.c137.project.sellmotors.leadcommand.dtos.LeadDto;
-import br.com.c137.project.sellmotors.leadcommand.entities.LeadEntity;
-import br.com.c137.project.sellmotors.leadcommand.repositories.LeadRepository;
+import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.dtos.LeadDto;
+import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.models.LeadEntity;
+import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.repositories.LeadRepository;
 import br.com.c137.project.sellmotors.leadcommand.services.LeadService;
 import br.com.c137.project.sellmotors.leadcommand.utils.MapperUtil;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class LeadServiceImpl implements LeadService {
 
-    private final LeadRepository leadRepository;
+    @Autowired
+    private LeadRepository leadRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
     private final MapperUtil<LeadEntity, LeadDto> mapperUtil;
 
-    public LeadServiceImpl(LeadRepository leadRepository, MapperUtil mapperUtil, ModelMapper modelMapper) {
-        this.leadRepository = leadRepository;
+    public LeadServiceImpl() {
         this.mapperUtil = new MapperUtil<>(modelMapper, LeadEntity.class, LeadDto.class);
     }
 
@@ -28,7 +35,7 @@ public class LeadServiceImpl implements LeadService {
 
     @Override
     public LeadDto update(LeadDto dto) {
-        LeadEntity leadEntity = leadRepository.findById(dto.getId()).orElseThrow(
+        LeadEntity leadEntity = leadRepository.findById(dto.id()).orElseThrow(
                 () -> new RuntimeException("Lead not found")
         );
         mapperUtil.updateSource(dto, leadEntity);
@@ -38,7 +45,7 @@ public class LeadServiceImpl implements LeadService {
     }
 
     @Override
-    public void deleteById(String id) {
+    public void deleteById(UUID id) {
         LeadEntity leadEntity = leadRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Lead not found")
         );
@@ -48,7 +55,7 @@ public class LeadServiceImpl implements LeadService {
     }
 
     @Override
-    public LeadDto getById(String id) {
+    public LeadDto getById(UUID id) {
         LeadEntity leadEntity = leadRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Lead not found")
         );
