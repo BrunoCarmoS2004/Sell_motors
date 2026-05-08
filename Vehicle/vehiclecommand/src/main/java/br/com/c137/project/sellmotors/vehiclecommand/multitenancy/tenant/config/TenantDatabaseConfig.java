@@ -25,8 +25,7 @@ import java.util.Map;
         "br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.repositories",
         "br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.models" })
 @EnableJpaRepositories(basePackages = {
-        "br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.repositories",
-        "br.com.c137.project.sellmotors.vehiclecommand.services" },
+        "br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.repositories"},
         entityManagerFactoryRef = "tenantEntityManagerFactory",
         transactionManagerRef = "tenantTransactionManager")
 public class TenantDatabaseConfig {

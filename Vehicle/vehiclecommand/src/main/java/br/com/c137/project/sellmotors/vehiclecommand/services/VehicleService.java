@@ -34,7 +34,7 @@ public class VehicleService {
     }
 
     public PagedModel<VehicleGetDTO> getAll(Pageable pageable) {
-        Page<VehicleGetDTO> vehiclePage = vehicleRepository.getAll(pageable, VehicleGetDTO.class);
+        Page<VehicleGetDTO> vehiclePage = vehicleRepository.findBy(pageable, VehicleGetDTO.class);
         return new PagedModel<>(vehiclePage);
     }
 

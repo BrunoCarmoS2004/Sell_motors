@@ -16,7 +16,8 @@ import java.util.UUID;
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle, UUID> {
     <T> Optional<T> getById(UUID id, Class<T> type);
-    <T> Page<T> getAll(Pageable pageable, Class<T> type);
+
+    <T> Page<T> findBy(Pageable pageable, Class<T> type);
 
     boolean existsByPlaca(String placa);
 
@@ -28,6 +29,6 @@ public interface VehicleRepository extends JpaRepository<Vehicle, UUID> {
 
     @Transactional
     @Modifying
-    @Query("")
+    @Query("UPDATE Vehicle v SET v.entityStatus = :entityStatus WHERE v.id = :id")
     void updateEntityStatus(EntityStatus entityStatus, UUID id);
 }
