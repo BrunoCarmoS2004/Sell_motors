@@ -1,6 +1,5 @@
 package br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.config;
 
-import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.mastertenant.config.DBContextHolder;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.springframework.util.StringUtils;
 

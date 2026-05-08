@@ -1,6 +1,6 @@
 package br.com.c137.project.sellmotors.vehiclecommand.security.config;
 
-import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.mastertenant.config.DBContextHolder;
+import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.config.DBContextHolder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;

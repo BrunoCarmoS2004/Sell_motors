@@ -1,4 +1,4 @@
-package br.com.c137.project.sellmotors.vehiclecommand.multitenancy.mastertenant.config;
+package br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.config;
 
 public class DBContextHolder {
 
