@@ -1,8 +1,8 @@
-package br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.dtos;
+package br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.dtos.gets;
 
 import java.util.UUID;
 
-public record LeadDto(
+public record LeadGetDto(
         UUID id,
 
         String fullName,

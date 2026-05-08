@@ -1,7 +1,9 @@
 package br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.models;
 
+import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.enums.EntityStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.*;
 
@@ -27,5 +29,10 @@ public class LeadEntity extends BaseEntity{
 
     @Column
     private String document;
+
+    @PrePersist
+    private void onCreate() {
+        setEntityStatus(EntityStatus.ATIVO);
+    }
 
 }

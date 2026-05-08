@@ -1,5 +1,6 @@
 package br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.models;
 
+import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.enums.EntityStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,4 +25,8 @@ public class BaseEntity {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(nullable = false, name = "entity_status")
+    @Enumerated(EnumType.STRING)
+    private EntityStatus entityStatus;
 }
