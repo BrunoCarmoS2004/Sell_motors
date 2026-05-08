@@ -1,12 +1,21 @@
 package br.com.c137.project.sellmotors.leadcommand.services.impl;
 
+import br.com.c137.project.sellmotors.leadcommand.exceptions.NotFoundException;
 import br.com.c137.project.sellmotors.leadcommand.mappers.LeadMapper;
-import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.dtos.LeadDto;
+import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.dtos.gets.LeadGetDto;
+import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.dtos.posts.LeadPostDto;
+import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.dtos.puts.LeadPutDto;
+import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.enums.EntityStatus;
 import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.models.LeadEntity;
 import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.repositories.LeadRepository;
 import br.com.c137.project.sellmotors.leadcommand.services.LeadService;
+import br.com.c137.project.sellmotors.leadcommand.utils.MessageUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -16,46 +25,62 @@ public class LeadServiceImpl implements LeadService {
 
     private final LeadMapper leadMapper;
 
+    private final MessageUtils messageUtils;
 
-    public LeadServiceImpl(LeadRepository leadRepository, LeadMapper leadMapper) {
+
+    public LeadServiceImpl(LeadRepository leadRepository, LeadMapper leadMapper, MessageUtils messageUtils) {
         this.leadRepository = leadRepository;
         this.leadMapper = leadMapper;
+        this.messageUtils = messageUtils;
     }
 
+
+
     @Override
-    public LeadDto create(LeadDto dto) {
-        LeadEntity leadEntity = leadMapper.leadDtoToEntity(dto);
+    public LeadGetDto create(LeadPostDto dto) {
+        LeadEntity leadEntity = leadMapper.leadDtoPostToEntity(dto);
         leadRepository.save(leadEntity);
-        return leadMapper.leadEntityToDto(leadEntity);
+        return leadMapper.leadEntityToDtoGet(leadEntity);
     }
 
     @Override
-    public LeadDto update(LeadDto dto) {
-        LeadEntity leadEntity = leadRepository.findById(dto.id()).orElseThrow(
-                () -> new RuntimeException("Lead not found")
+    public LeadGetDto update(LeadPutDto dto, UUID id) {
+        LeadEntity leadEntity = leadRepository.findById(id).orElseThrow(
+                () -> new RuntimeException(getNotFoundMessage())
         );
-        leadMapper.leadUpdate(dto, leadEntity);
+        leadMapper.leadUpdatePut(dto, leadEntity);
         leadRepository.save(leadEntity);
 
-        return leadMapper.leadEntityToDto(leadEntity);
+        return leadMapper.leadEntityToDtoGet(leadEntity);
     }
 
     @Override
     public void deleteById(UUID id) {
-        LeadEntity leadEntity = leadRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Lead not found")
-        );
+        if(!leadRepository.existsById(id)) {
+            throw new NotFoundException(getNotFoundMessage());
+        }
 
-        leadRepository.delete(leadEntity);
+        leadRepository.updateEntityStatus(id, EntityStatus.INATIVO);
 
     }
 
     @Override
-    public LeadDto getById(UUID id) {
+    public LeadGetDto getById(UUID id) {
         LeadEntity leadEntity = leadRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Lead not found")
+                () -> new RuntimeException(getNotFoundMessage())
         );
 
-        return leadMapper.leadEntityToDto(leadEntity);
+        return leadMapper.leadEntityToDtoGet(leadEntity);
+    }
+
+    @Override
+    public PagedModel<LeadGetDto> getAll(Pageable pageable) {
+        Page<LeadGetDto> leads = leadRepository.findAllBy(pageable, LeadGetDto.class);
+        return new PagedModel<LeadGetDto>(leads);
+    }
+
+
+    private String getNotFoundMessage() {
+        return messageUtils.getMessage("leads.not-found");
     }
 }
