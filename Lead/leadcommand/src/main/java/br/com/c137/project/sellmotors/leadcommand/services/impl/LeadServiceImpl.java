@@ -1,12 +1,10 @@
 package br.com.c137.project.sellmotors.leadcommand.services.impl;
 
+import br.com.c137.project.sellmotors.leadcommand.mappers.LeadMapper;
 import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.dtos.LeadDto;
 import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.models.LeadEntity;
 import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.repositories.LeadRepository;
 import br.com.c137.project.sellmotors.leadcommand.services.LeadService;
-import br.com.c137.project.sellmotors.leadcommand.utils.MapperUtil;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -16,18 +14,19 @@ public class LeadServiceImpl implements LeadService {
 
     private final LeadRepository leadRepository;
 
-    private final MapperUtil<LeadEntity, LeadDto> mapperUtil;
+    private final LeadMapper leadMapper;
 
-    public LeadServiceImpl(LeadRepository leadRepository, ModelMapper modelMapper) {
+
+    public LeadServiceImpl(LeadRepository leadRepository, LeadMapper leadMapper) {
         this.leadRepository = leadRepository;
-        this.mapperUtil = new MapperUtil<>(modelMapper, LeadEntity.class, LeadDto.class);
+        this.leadMapper = leadMapper;
     }
 
     @Override
     public LeadDto create(LeadDto dto) {
-        LeadEntity leadEntity = mapperUtil.convertToSource(dto);
+        LeadEntity leadEntity = leadMapper.leadDtoToEntity(dto);
         leadRepository.save(leadEntity);
-        return mapperUtil.convertToTarget(leadEntity);
+        return leadMapper.leadEntityToDto(leadEntity);
     }
 
     @Override
@@ -35,10 +34,10 @@ public class LeadServiceImpl implements LeadService {
         LeadEntity leadEntity = leadRepository.findById(dto.id()).orElseThrow(
                 () -> new RuntimeException("Lead not found")
         );
-        mapperUtil.updateSource(dto, leadEntity);
+        leadMapper.leadUpdate(dto, leadEntity);
         leadRepository.save(leadEntity);
 
-        return mapperUtil.convertToTarget(leadEntity);
+        return leadMapper.leadEntityToDto(leadEntity);
     }
 
     @Override
@@ -57,6 +56,6 @@ public class LeadServiceImpl implements LeadService {
                 () -> new RuntimeException("Lead not found")
         );
 
-        return mapperUtil.convertToTarget(leadEntity);
+        return leadMapper.leadEntityToDto(leadEntity);
     }
 }
