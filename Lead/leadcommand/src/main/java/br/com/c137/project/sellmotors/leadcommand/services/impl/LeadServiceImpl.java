@@ -8,6 +8,7 @@ import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.dtos.puts.
 import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.enums.EntityStatus;
 import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.models.LeadEntity;
 import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.repositories.LeadRepository;
+import br.com.c137.project.sellmotors.leadcommand.services.BrokerService;
 import br.com.c137.project.sellmotors.leadcommand.services.LeadService;
 import br.com.c137.project.sellmotors.leadcommand.utils.MessageUtils;
 import org.springframework.data.domain.Page;
@@ -27,11 +28,14 @@ public class LeadServiceImpl implements LeadService {
 
     private final MessageUtils messageUtils;
 
+    private final BrokerService brokerService;
 
-    public LeadServiceImpl(LeadRepository leadRepository, LeadMapper leadMapper, MessageUtils messageUtils) {
+
+    public LeadServiceImpl(LeadRepository leadRepository, LeadMapper leadMapper, MessageUtils messageUtils, BrokerService brokerService) {
         this.leadRepository = leadRepository;
         this.leadMapper = leadMapper;
         this.messageUtils = messageUtils;
+        this.brokerService = brokerService;
     }
 
 
@@ -40,7 +44,9 @@ public class LeadServiceImpl implements LeadService {
     public LeadGetDto create(LeadPostDto dto) {
         LeadEntity leadEntity = leadMapper.leadDtoPostToEntity(dto);
         leadRepository.save(leadEntity);
-        return leadMapper.leadEntityToDtoGet(leadEntity);
+        LeadGetDto dtoUpdate = leadMapper.leadEntityToDtoGet(leadEntity);
+        sendLeadToQueue(dtoUpdate);
+        return dtoUpdate;
     }
 
     @Override
@@ -82,5 +88,10 @@ public class LeadServiceImpl implements LeadService {
 
     private String getNotFoundMessage() {
         return messageUtils.getMessage("leads.not-found");
+    }
+
+    private void sendLeadToQueue(LeadGetDto dto) {
+
+        brokerService.send("lead", dto);
     }
 }

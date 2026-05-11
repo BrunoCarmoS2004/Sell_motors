@@ -80,4 +80,16 @@ public class ExceptionsHandler {
                 req.getServletPath()
         );
     }
+
+    @ExceptionHandler(value = RabbitMqSerializingException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorView handleRabbitMqSerializingException(HttpServletRequest req, RabbitMqSerializingException e) {
+        final HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        return new ErrorView(
+                httpStatus.value(),
+                e.getMessage(),
+                httpStatus.name(),
+                req.getServletPath()
+        );
+    }
 }
