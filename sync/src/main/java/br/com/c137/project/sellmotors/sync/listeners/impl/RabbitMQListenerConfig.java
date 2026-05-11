@@ -1,0 +1,63 @@
+package br.com.c137.project.sellmotors.sync.listeners.impl;
+
+import br.com.c137.project.sellmotors.sync.dtos.LeadDto;
+import br.com.c137.project.sellmotors.sync.dtos.VehicleDto;
+import br.com.c137.project.sellmotors.sync.listeners.ListenerConfig;
+import br.com.c137.project.sellmotors.sync.utils.SyncLogger;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@EnableRabbit
+public class RabbitMQListenerConfig implements ListenerConfig {
+
+    private final ObjectMapper objectMapper;
+
+    public RabbitMQListenerConfig(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
+    @Bean
+    public Queue leadQueue() {
+        return new Queue("leadQueue", true);
+    }
+
+    @Bean
+    public Queue vehicleQueue() {
+        return new Queue("vehicleQueue", true);
+    }
+
+    @RabbitListener(queues = "leadQueue")
+    @Override
+    public void listenToLeadQueue(String message) {
+        try {
+            LeadDto lead = objectMapper.readValue(message, LeadDto.class);
+
+            //SYNC DATA HERE...
+
+            SyncLogger.info("Mensagem recebida da fila leadQueue: " + lead.toString());
+        } catch (Exception e) {
+            SyncLogger.error("Erro em ouvir a leadQueue " + e.getMessage());
+        }
+
+    }
+
+    @RabbitListener(queues = "vehicleQueue")
+    @Override
+    public void listenToVehicleQueue(String message) {
+        try {
+            VehicleDto vehicle = objectMapper.readValue(message, VehicleDto.class);
+
+            //SYNC DATA HERE...
+
+            SyncLogger.info("Mensagem recebida da fila vehicleQueue: " + vehicle.toString());
+        } catch (Exception e) {
+            SyncLogger.error("Erro em ouvir a vehicleQueue " + e.getMessage());
+        }
+
+    }
+}
