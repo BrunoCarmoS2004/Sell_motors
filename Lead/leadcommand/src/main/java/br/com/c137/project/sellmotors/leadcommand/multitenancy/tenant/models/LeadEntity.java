@@ -1,12 +1,12 @@
 package br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.models;
 
 import br.com.c137.project.sellmotors.leadcommand.multitenancy.tenant.enums.EntityStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -16,7 +16,11 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "leads")
-public class LeadEntity extends BaseEntity{
+public class LeadEntity{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false, name = "full_name")
     private String fullName;
@@ -30,9 +34,21 @@ public class LeadEntity extends BaseEntity{
     @Column
     private String document;
 
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(nullable = false, name = "entity_status")
+    @Enumerated(EnumType.STRING)
+    private EntityStatus entityStatus;
+
     @PrePersist
     private void onCreate() {
-        setEntityStatus(EntityStatus.ATIVO);
+        this.entityStatus = EntityStatus.ATIVO;
     }
 
 }

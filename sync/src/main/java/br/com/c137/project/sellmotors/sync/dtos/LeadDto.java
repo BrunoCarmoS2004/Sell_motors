@@ -1,5 +1,8 @@
 package br.com.c137.project.sellmotors.sync.dtos;
 
+import br.com.c137.project.sellmotors.sync.enums.EntityStatus;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record LeadDto(
@@ -11,6 +14,14 @@ public record LeadDto(
 
         String phone,
 
-        String document
+        String document,
+
+        EntityStatus entityStatus,
+
+        LocalDateTime deletedAt,
+
+        LocalDateTime createdAt,
+
+        LocalDateTime updatedAt
 ) {
 }

@@ -56,17 +56,24 @@ public class LeadServiceImpl implements LeadService {
         );
         leadMapper.leadUpdatePut(dto, leadEntity);
         leadRepository.save(leadEntity);
+        LeadGetDto dtoUpdate = leadMapper.leadEntityToDtoGet(leadEntity);
+        sendLeadToQueue(dtoUpdate);
 
-        return leadMapper.leadEntityToDtoGet(leadEntity);
+        return dtoUpdate;
     }
 
     @Override
     public void deleteById(UUID id) {
-        if(!leadRepository.existsById(id)) {
-            throw new NotFoundException(getNotFoundMessage());
-        }
 
-        leadRepository.updateEntityStatus(id, EntityStatus.INATIVO);
+        LeadEntity leadEntity = leadRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(getNotFoundMessage())
+        );
+
+        leadEntity.setEntityStatus(EntityStatus.INATIVO);
+        leadRepository.save(leadEntity);
+        LeadGetDto dtoUpdate = leadMapper.leadEntityToDtoGet(leadEntity);
+
+        sendLeadToQueue(dtoUpdate);
 
     }
 
