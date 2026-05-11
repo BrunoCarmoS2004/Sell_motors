@@ -27,6 +27,7 @@ services:
       - "27017:27017"
     volumes:
       - mongodb-data:/data/db
+      - './mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh'
     healthcheck:
       test: ["CMD-SHELL", "mongosh --quiet --username sellmotors --password sellmotors --authenticationDatabase admin --eval \"db.runCommand({ ping: 1 }).ok\" | grep 1"]
       interval: 10s

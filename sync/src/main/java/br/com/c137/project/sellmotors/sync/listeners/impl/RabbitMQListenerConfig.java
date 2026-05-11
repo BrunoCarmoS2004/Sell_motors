@@ -3,6 +3,7 @@ package br.com.c137.project.sellmotors.sync.listeners.impl;
 import br.com.c137.project.sellmotors.sync.dtos.LeadDto;
 import br.com.c137.project.sellmotors.sync.dtos.VehicleDto;
 import br.com.c137.project.sellmotors.sync.listeners.ListenerConfig;
+import br.com.c137.project.sellmotors.sync.services.SyncService;
 import br.com.c137.project.sellmotors.sync.utils.SyncLogger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.Queue;
@@ -17,8 +18,11 @@ public class RabbitMQListenerConfig implements ListenerConfig {
 
     private final ObjectMapper objectMapper;
 
-    public RabbitMQListenerConfig(ObjectMapper objectMapper) {
+    private final SyncService syncService;
+
+    public RabbitMQListenerConfig(ObjectMapper objectMapper, SyncService syncService) {
         this.objectMapper = objectMapper;
+        this.syncService = syncService;
     }
 
     @Bean
@@ -37,7 +41,7 @@ public class RabbitMQListenerConfig implements ListenerConfig {
         try {
             LeadDto lead = objectMapper.readValue(message, LeadDto.class);
 
-            //SYNC DATA HERE...
+            syncService.syncLead(lead);
 
             SyncLogger.info("Mensagem recebida da fila leadQueue: " + lead.toString());
         } catch (Exception e) {
@@ -52,7 +56,7 @@ public class RabbitMQListenerConfig implements ListenerConfig {
         try {
             VehicleDto vehicle = objectMapper.readValue(message, VehicleDto.class);
 
-            //SYNC DATA HERE...
+            syncService.syncVehicle(vehicle);
 
             SyncLogger.info("Mensagem recebida da fila vehicleQueue: " + vehicle.toString());
         } catch (Exception e) {
