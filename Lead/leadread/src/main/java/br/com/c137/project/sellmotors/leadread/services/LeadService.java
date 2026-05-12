@@ -1,15 +1,17 @@
 package br.com.c137.project.sellmotors.leadread.services;
 
 import br.com.c137.project.sellmotors.leadread.domains.leads.LeadDomain;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface LeadService {
 
-    List<LeadDomain> findAllByTenantId(String tenantId);
+    PagedModel<LeadDomain> findAllByTenantId(Pageable pageable);
 
-    List<LeadDomain> listByNameLikeIgnoreCase(String name);
+    PagedModel<LeadDomain> listByNameLikeIgnoreCase(String name, UUID createdBy, Pageable pageable);
 
-    List<LeadDomain> listByEmailLikeIgnoreCase(String email);
+    PagedModel<LeadDomain> listByEmailLikeIgnoreCase(String email, UUID createdBy, Pageable pageable);
 }

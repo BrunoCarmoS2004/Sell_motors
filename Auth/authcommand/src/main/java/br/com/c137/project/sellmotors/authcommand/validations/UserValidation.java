@@ -38,7 +38,7 @@ public class UserValidation {
     public void inscriptionExistsValidation(String inscription) {
         boolean exist = userRepository.existsByInscription(inscription);
         if (exist) {
-            throw new ValidationException(getEmailExistsMessage());
+            throw new ValidationException(getInscriptionExistsMessage());
         }
     }
 
@@ -52,7 +52,7 @@ public class UserValidation {
     public void inscriptionExistsInOtherIdValidation(String inscription, UUID id) {
         boolean exist = userRepository.existsByInscriptionAndIdNot(inscription, id);
         if (exist) {
-            throw new ValidationException(getEmailExistsMessage());
+            throw new ValidationException(getInscriptionExistsMessage());
         }
     }
 

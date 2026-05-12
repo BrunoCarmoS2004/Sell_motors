@@ -1,0 +1,19 @@
+package br.com.c137.project.sellmotors.leadread.utils;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+
+import java.util.UUID;
+
+public class ServiceUtils {
+
+    public static UUID getUserIdFromToken() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth != null && auth.getPrincipal() instanceof Jwt jwt) {
+            return UUID.fromString(jwt.getSubject());
+        }
+        return null;
+    }
+}
