@@ -2,6 +2,7 @@ package br.com.c137.project.sellmotors.leadread.controllers;
 
 import br.com.c137.project.sellmotors.leadread.domains.leads.LeadDomain;
 import br.com.c137.project.sellmotors.leadread.services.LeadService;
+import jakarta.ws.rs.PathParam;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedModel;
@@ -24,5 +25,10 @@ public class LeadController {
     @GetMapping()
     ResponseEntity<PagedModel<LeadDomain>> listAllLeads(@PageableDefault Pageable pageable) {
         return ResponseEntity.ok(leadService.findAllByTenantId(pageable));
+    }
+
+    @GetMapping("/name/{name}")
+    ResponseEntity<PagedModel<LeadDomain>> listAllLeadsByName(@PathVariable String name, @PageableDefault Pageable pageable) {
+        return ResponseEntity.ok(leadService.listByNameLikeIgnoreCase(name, pageable));
     }
 }

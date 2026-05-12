@@ -11,7 +11,7 @@ public interface LeadService {
 
     PagedModel<LeadDomain> findAllByTenantId(Pageable pageable);
 
-    PagedModel<LeadDomain> listByNameLikeIgnoreCase(String name, UUID createdBy, Pageable pageable);
+    PagedModel<LeadDomain> listByNameLikeIgnoreCase(String name, Pageable pageable);
 
-    PagedModel<LeadDomain> listByEmailLikeIgnoreCase(String email, UUID createdBy, Pageable pageable);
+    PagedModel<LeadDomain> listByEmailLikeIgnoreCase(String email, Pageable pageable);
 }
