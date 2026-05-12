@@ -5,25 +5,27 @@ import br.com.c137.project.sellmotors.sync.enums.EntityStatus;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "leads")
 public record LeadDto(
-        UUID id,
+                UUID id,
 
-        String fullName,
+                String fullName,
 
-        String email,
+                String email,
 
-        String phone,
+                String phone,
 
-        String document,
+                String document,
 
-        EntityStatus entityStatus,
+                EntityStatus entityStatus,
 
-        LocalDateTime deletedAt,
+                LocalDateTime deletedAt,
 
-        LocalDateTime createdAt,
+                LocalDateTime createdAt,
 
-        LocalDateTime updatedAt,
+                LocalDateTime updatedAt,
 
-        String createdBy
-) {
+                String createdBy) {
 }
