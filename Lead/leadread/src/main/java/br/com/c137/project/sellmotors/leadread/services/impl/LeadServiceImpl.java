@@ -39,8 +39,12 @@ public class LeadServiceImpl implements LeadService {
     }
 
     @Override
-    public PagedModel<LeadDomain> listByNameLikeIgnoreCase(String name, UUID createdBy, Pageable pageable) {
+    public PagedModel<LeadDomain> listByNameLikeIgnoreCase(String name, Pageable pageable) {
         try {
+            UUID createdBy = ServiceUtils.getUserIdFromToken();
+            if(createdBy == null) {
+                throw new TokenValidationException(messageUtils.getMessage("leads.token-validation-error"));
+            }
             return new PagedModel<>(leadRepository.findByNameLikeIgnoreCase(name, createdBy, pageable));
         } catch (Exception e) {
             throw new NotFoundException(messageUtils.getMessage("leads.not-found") + e.getMessage());
@@ -49,8 +53,12 @@ public class LeadServiceImpl implements LeadService {
     }
 
     @Override
-    public PagedModel<LeadDomain> listByEmailLikeIgnoreCase(String email, UUID createdBy, Pageable pageable) {
+    public PagedModel<LeadDomain> listByEmailLikeIgnoreCase(String email, Pageable pageable) {
         try {
+            UUID createdBy = ServiceUtils.getUserIdFromToken();
+            if(createdBy == null) {
+                throw new TokenValidationException(messageUtils.getMessage("leads.token-validation-error"));
+            }
             return new PagedModel<>(leadRepository.findByEmailLikeIgnoreCase(email, createdBy, pageable));
         } catch (Exception e) {
             throw new NotFoundException(messageUtils.getMessage("leads.not-found") + e.getMessage());
