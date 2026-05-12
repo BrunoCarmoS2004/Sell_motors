@@ -3,7 +3,7 @@ package br.com.c137.project.sellmotors.vehiclecommand.validations;
 import br.com.c137.project.sellmotors.vehiclecommand.exceptions.NotFoundException;
 import br.com.c137.project.sellmotors.vehiclecommand.exceptions.ValidationException;
 import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.repositories.VehicleRepository;
-import br.com.c137.project.sellmotors.vehiclecommand.services.MessageUtils;
+import br.com.c137.project.sellmotors.vehiclecommand.utils.MessageUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;

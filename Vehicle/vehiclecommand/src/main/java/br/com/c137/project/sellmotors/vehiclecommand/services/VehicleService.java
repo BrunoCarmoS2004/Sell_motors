@@ -8,6 +8,7 @@ import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.dtos.pu
 import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.enums.EntityStatus;
 import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.models.Vehicle;
 import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.repositories.VehicleRepository;
+import br.com.c137.project.sellmotors.vehiclecommand.utils.MessageUtils;
 import br.com.c137.project.sellmotors.vehiclecommand.validations.VehicleValidation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,11 +27,14 @@ public class VehicleService {
 
     private final MessageUtils messageUtils;
 
-    public VehicleService(VehicleRepository vehicleRepository, VehicleValidation vehicleValidation, VehicleMapper vehicleMapper, MessageUtils messageUtils) {
+    private final BrokerService brokerService;
+
+    public VehicleService(VehicleRepository vehicleRepository, VehicleValidation vehicleValidation, VehicleMapper vehicleMapper, MessageUtils messageUtils, BrokerService brokerService) {
         this.vehicleRepository = vehicleRepository;
         this.vehicleValidation = vehicleValidation;
         this.vehicleMapper = vehicleMapper;
         this.messageUtils = messageUtils;
+        this.brokerService = brokerService;
     }
 
     public PagedModel<VehicleGetDTO> getAll(Pageable pageable) {
@@ -46,7 +50,7 @@ public class VehicleService {
         vehicleValidation.placaExistsValidation(vehiclePostDTO.placa());
         vehicleValidation.chassiExistisValidation(vehiclePostDTO.chassi());
         Vehicle vehicle = vehicleMapper.postToVehicle(vehiclePostDTO);
-        return saveAndReturn(vehicle);
+        return saveReturnAndSend(vehicle);
     }
 
     public VehicleGetDTO putVehicle(UUID id, VehiclePutDTO vehiclePutDTO) {
@@ -54,7 +58,7 @@ public class VehicleService {
         vehicleValidation.chassiExistisValidation(vehiclePutDTO.chassi());
         Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new NotFoundException(getNotFoundMessage()));
         vehicle = vehicleMapper.putToVehicle(vehiclePutDTO, vehicle);
-        return saveAndReturn(vehicle);
+        return saveReturnAndSend(vehicle);
     }
 
     public void deleteVehicle(UUID id) {
@@ -75,7 +79,13 @@ public class VehicleService {
         return messageUtils.getMessage("vehicle.not-found");
     }
 
-    private VehicleGetDTO saveAndReturn(Vehicle vehicle) {
-        return vehicleMapper.vehicleToVehicleGetDTO(vehicleRepository.save(vehicle));
+    private VehicleGetDTO saveReturnAndSend(Vehicle vehicle) {
+        VehicleGetDTO vehicleGetDTO = vehicleMapper.vehicleToVehicleGetDTO(vehicleRepository.save(vehicle));
+        sendVehicleToQueue(vehicleGetDTO);
+        return vehicleGetDTO;
+    }
+
+    private void sendVehicleToQueue(VehicleGetDTO vehicleGetDTO) {
+        brokerService.send("vehicle", vehicleGetDTO);
     }
 }

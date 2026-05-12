@@ -1,4 +1,4 @@
-package br.com.c137.project.sellmotors.vehiclecommand.services;
+package br.com.c137.project.sellmotors.vehiclecommand.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

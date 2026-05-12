@@ -4,7 +4,7 @@ import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.dtos.ge
 import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.dtos.posts.VehiclePostDTO;
 import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.dtos.puts.VehiclePutDTO;
 import br.com.c137.project.sellmotors.vehiclecommand.responses.ResponsePayload;
-import br.com.c137.project.sellmotors.vehiclecommand.services.MessageUtils;
+import br.com.c137.project.sellmotors.vehiclecommand.utils.MessageUtils;
 import br.com.c137.project.sellmotors.vehiclecommand.services.VehicleService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

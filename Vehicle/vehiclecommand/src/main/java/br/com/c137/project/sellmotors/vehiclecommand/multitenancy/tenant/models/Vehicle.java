@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static br.com.c137.project.sellmotors.vehiclecommand.utils.ServiceUtils.getUserIdFromToken;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -70,12 +72,16 @@ public class Vehicle {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(name = "created_by")
+    private UUID createdBy;
+
     @Column(name = "entity_status")
     @Enumerated(EnumType.STRING)
     private EntityStatus entityStatus;
 
     @PrePersist
     public void onCreate() {
+        this.createdBy = getUserIdFromToken();
         this.entityStatus = EntityStatus.ATIVO;
     }
 }

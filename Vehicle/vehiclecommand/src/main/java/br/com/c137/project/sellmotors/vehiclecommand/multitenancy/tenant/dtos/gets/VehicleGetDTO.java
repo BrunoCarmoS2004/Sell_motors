@@ -40,6 +40,8 @@ public record VehicleGetDTO(
 
         LocalDateTime updatedAt,
 
-        EntityStatus entityStatus
+        EntityStatus entityStatus,
+
+        UUID createdBy
 ) {
 }
