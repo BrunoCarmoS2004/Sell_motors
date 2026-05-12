@@ -9,6 +9,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static br.com.c137.project.sellmotors.leadcommand.utils.ServiceUtils.getUserIdFromToken;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -46,8 +48,12 @@ public class LeadEntity{
     @Enumerated(EnumType.STRING)
     private EntityStatus entityStatus;
 
+    @Column(name = "created_by")
+    private UUID createdBy;
+
     @PrePersist
     private void onCreate() {
+        this.createdBy = getUserIdFromToken();
         this.entityStatus = EntityStatus.ATIVO;
     }
 

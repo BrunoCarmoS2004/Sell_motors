@@ -36,4 +36,6 @@ public class LeadDomain {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private UUID createdBy;
 }

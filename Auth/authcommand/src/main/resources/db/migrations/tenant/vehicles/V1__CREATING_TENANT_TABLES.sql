@@ -17,7 +17,8 @@ CREATE TABLE vehicle (
      entity_status VARCHAR(30),
      deleted_at TIMESTAMP WITHOUT TIME ZONE,
      created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-     updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+     updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     created_by UUID NOT NULL
 );
 
 -- Comentários para auxiliar na manutenção do banco

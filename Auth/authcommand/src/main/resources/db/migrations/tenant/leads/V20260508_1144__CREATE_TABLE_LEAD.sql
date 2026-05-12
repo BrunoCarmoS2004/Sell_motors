@@ -5,5 +5,8 @@ CREATE TABLE leads (
                        phone VARCHAR(50) NOT NULL,
                        document VARCHAR(50),
                        created_at TIMESTAMP,
-                       updated_at TIMESTAMP
+                       updated_at TIMESTAMP,
+                       entity_status VARCHAR(50) NOT NULL DEFAULT 'ATIVO',
+                       created_by UUID NOT NULL
+
 );

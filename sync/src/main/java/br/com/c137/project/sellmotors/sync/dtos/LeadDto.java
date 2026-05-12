@@ -22,6 +22,8 @@ public record LeadDto(
 
         LocalDateTime createdAt,
 
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+
+        UUID createdBy
 ) {
 }
