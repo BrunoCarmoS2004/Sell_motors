@@ -38,14 +38,14 @@ public class VehicleController {
         return ResponseEntity.status(HttpStatus.OK).body(vehicleService.findAllByCreatedBy(pageable));
     }
 
-    @GetMapping("/{modelo}")
+    @GetMapping("/modelo/{modelo}")
     public ResponseEntity<PagedModel<VehicleFullDTO>> findAllByModeloLikeIgnoreCase(
             @PathVariable String modelo,
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(vehicleService.findAllByModeloLikeIgnoreCase(modelo, pageable));
     }
 
-    @GetMapping("/{marca}")
+    @GetMapping("/marca/{marca}")
     public ResponseEntity<PagedModel<VehicleFullDTO>> findAllByMarcaLikeIgnoreCase(
             @PathVariable String marca,
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {

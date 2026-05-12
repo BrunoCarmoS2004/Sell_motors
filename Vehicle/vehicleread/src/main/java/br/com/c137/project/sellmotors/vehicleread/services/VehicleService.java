@@ -25,41 +25,25 @@ public class VehicleService {
     }
 
     public PagedModel<VehicleFullDTO> findAllByCreatedBy(Pageable pageable) {
-        try {
             UUID usuarioId = getUserIdFromToken();
             return new PagedModel<>(vehicleRepository.findAllByCreatedBy(usuarioId, pageable, VehicleFullDTO.class));
-        }catch (Exception e){
-            throw new RuntimeException(e.getMessage());
-        }
     }
 
     public VehicleFullDTO findVehicleFullById(UUID id) {
-        try{
             UUID usuarioId = getUserIdFromToken();
             return vehicleRepository.findById(id, usuarioId, VehicleFullDTO.class).orElseThrow(
                     () -> new NotFoundException(messageUtils.getMessage("vehicle.not-found"))
             );
-        }catch (Exception e){
-            throw new RuntimeException(e.getMessage());
-        }
     }
 
     public PagedModel<VehicleFullDTO> findAllByModeloLikeIgnoreCase(String modelo, Pageable pageable) {
-        try {
             UUID usuarioId = getUserIdFromToken();
             return new PagedModel<>(vehicleRepository.findByModeloLikeIgnoreCase(modelo, usuarioId, pageable, VehicleFullDTO.class));
-        }catch (Exception e){
-            throw new RuntimeException(e.getMessage());
-        }
     }
 
     public PagedModel<VehicleFullDTO> findAllByMarcaLikeIgnoreCase(String marca, Pageable pageable) {
-        try {
             UUID usuarioId = getUserIdFromToken();
             return new PagedModel<>(vehicleRepository.findByMarcaLikeIgnoreCase(marca, usuarioId, pageable, VehicleFullDTO.class));
-        }catch (Exception e){
-            throw new RuntimeException(e.getMessage());
-        }
     }
 
     private UUID getUserIdFromToken(){
