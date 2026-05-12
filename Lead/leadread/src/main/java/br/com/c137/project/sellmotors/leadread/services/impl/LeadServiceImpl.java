@@ -23,11 +23,11 @@ public class LeadServiceImpl implements LeadService {
     }
 
     @Override
-    public List<LeadDomain> findAllByTenantId(UUID tenantId) {
+    public List<LeadDomain> findAllByTenantId(String tenantId) {
         try {
-            return leadRepository.findAllByTenantId(tenantId);
+            return leadRepository.findAllByCreatedBy(tenantId);
         } catch (Exception e) {
-            throw new NotFoundException(messageUtils.getMessage("leads.not-found"));
+            throw new NotFoundException(messageUtils.getMessage("leads.not-found") + e.getMessage());
         }
     }
 

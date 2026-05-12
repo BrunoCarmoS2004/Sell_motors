@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface LeadService {
 
-    List<LeadDomain> findAllByTenantId(UUID tenantId);
+    List<LeadDomain> findAllByTenantId(String tenantId);
 
     List<LeadDomain> listByNameLikeIgnoreCase(String name);
 

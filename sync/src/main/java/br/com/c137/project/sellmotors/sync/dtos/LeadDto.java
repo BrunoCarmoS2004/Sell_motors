@@ -24,6 +24,6 @@ public record LeadDto(
 
         LocalDateTime updatedAt,
 
-        UUID createdBy
+        String createdBy
 ) {
 }

@@ -19,7 +19,7 @@ public class LeadController {
     }
 
     @GetMapping("/{tenantId}")
-    ResponseEntity<List<LeadDomain>> listAllLeads(@PathVariable UUID tenantId) {
+    ResponseEntity<List<LeadDomain>> listAllLeads(@PathVariable String tenantId) {
         return ResponseEntity.ok(leadService.findAllByTenantId(tenantId));
     }
 }

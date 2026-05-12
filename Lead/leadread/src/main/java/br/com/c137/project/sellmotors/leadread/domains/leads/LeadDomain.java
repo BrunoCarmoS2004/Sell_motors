@@ -3,6 +3,7 @@ package br.com.c137.project.sellmotors.leadread.domains.leads;
 import br.com.c137.project.sellmotors.leadread.enums.EntityStatus;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -18,8 +19,6 @@ public class LeadDomain {
 
     @Id
     private UUID id;
-
-    private UUID tenantId;
 
     private String fullName;
 
@@ -37,5 +36,5 @@ public class LeadDomain {
 
     private LocalDateTime updatedAt;
 
-    private UUID createdBy;
+    private String createdBy;
 }
