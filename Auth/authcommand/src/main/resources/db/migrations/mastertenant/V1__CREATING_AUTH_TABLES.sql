@@ -49,3 +49,21 @@ CREATE TABLE IF NOT EXISTS users_tenants (
     PRIMARY KEY (id)
     );
 CREATE INDEX idx_tenant_user ON users_tenants (db_user_id);
+
+CREATE TABLE IF NOT EXISTS users_integrations (
+                                                   id UUID NOT NULL,
+                                                   tenant_id UUID NOT NULL,
+                                                   platform_name VARCHAR(50) NOT NULL,
+    access_token TEXT,
+    refresh_token TEXT,
+    expires_at TIMESTAMP WITH TIME ZONE,
+                             account_id VARCHAR(100),
+    additional_data JSONB,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+
+                             PRIMARY KEY (id),
+    CONSTRAINT uk_tenant_platform UNIQUE (tenant_id, platform_name)
+    );
+
+CREATE INDEX IF NOT EXISTS idx_users_integrations_tenant ON users_integrations(tenant_id);
