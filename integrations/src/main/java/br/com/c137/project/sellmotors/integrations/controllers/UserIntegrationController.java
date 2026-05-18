@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/integration")
 public class UserIntegrationController {
@@ -20,6 +22,12 @@ public class UserIntegrationController {
     @GetMapping("/mercadolivre/token/{tgCode}")
     ResponseEntity<Void> getTokenMercadoLivre(@PathVariable String tgCode) {
         userIntegrationService.getTokenMercadoLivre(tgCode);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/mercadolivre/refreshtoken/{tenantId}")
+    ResponseEntity<Void> getRefreshTokenMercadoLivre(@PathVariable UUID tenantId) {
+        userIntegrationService.getRefreshTokenMercadoLivre(tenantId);
         return ResponseEntity.ok().build();
     }
 }
