@@ -29,48 +29,35 @@ public class LeadServiceImpl implements LeadService {
 
     @Override
     public PagedModel<LeadFullDto> findAllByTenantId(Pageable pageable) {
-        try {
             UUID uuid = ServiceUtils.getUserIdFromToken();
             if(uuid == null) {
                 throw new TokenValidationException(messageUtils.getMessage("leads.token-validation-error"));
             }
             return new PagedModel<>(leadRepository.findAllByCreatedBy(uuid, pageable, LeadFullDto.class));
-        } catch (Exception e) {
-            throw new RuntimeException(messageUtils.getMessage("leads.not-found") + e.getMessage());
-        }
     }
 
     @Override
     public PagedModel<LeadFullDto> listByNameLikeIgnoreCase(String name, Pageable pageable) {
-        try {
             UUID createdBy = ServiceUtils.getUserIdFromToken();
             if(createdBy == null) {
                 throw new TokenValidationException(messageUtils.getMessage("leads.token-validation-error"));
             }
             return new PagedModel<>(leadRepository.findByNameLikeIgnoreCase(name, createdBy, pageable, LeadFullDto.class));
-        } catch (Exception e) {
-            throw new RuntimeException(messageUtils.getMessage("leads.not-found") + e.getMessage());
-        }
 
     }
 
     @Override
     public PagedModel<LeadFullDto> listByEmailLikeIgnoreCase(String email, Pageable pageable) {
-        try {
             UUID createdBy = ServiceUtils.getUserIdFromToken();
             if(createdBy == null) {
                 throw new TokenValidationException(messageUtils.getMessage("leads.token-validation-error"));
             }
             return new PagedModel<>(leadRepository.findByEmailLikeIgnoreCase(email, createdBy, pageable, LeadFullDto.class));
-        } catch (Exception e) {
-            throw new RuntimeException(messageUtils.getMessage("leads.not-found") + e.getMessage());
-        }
 
     }
 
     @Override
     public LeadFullDto findById(UUID id) {
-        try {
             UUID createdBy = ServiceUtils.getUserIdFromToken();
             if (createdBy == null) {
                 throw new TokenValidationException(messageUtils.getMessage("leads.token-validation-error"));
@@ -78,9 +65,6 @@ public class LeadServiceImpl implements LeadService {
             return leadRepository.findById(id, createdBy, LeadFullDto.class).orElseThrow(
                     () -> new NotFoundException(messageUtils.getMessage("leads.not-found"))
             );
-        } catch (Exception e) {
-            throw new RuntimeException(messageUtils.getMessage("leads.not-found") + e.getMessage());
-        }
 
     }
 }
