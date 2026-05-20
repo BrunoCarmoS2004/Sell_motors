@@ -1,21 +1,11 @@
 package br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.models;
 
-import jakarta.persistence.*;
-import lombok.Data;
+public record AnuncioAttribute(
 
-@Data
-@Entity
-@Table(name = "attributes")
-public class AnuncioAttribute {
+        String id,
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+        String valueName
+) {
 
-    // Mapeia o "id" que vem no JSON (ex: "BRAND", "MODEL")
-    @Column(name = "attribute_key")
-    private String attributeKey;
 
-    @Column(name = "value_name")
-    private String valueName;
 }

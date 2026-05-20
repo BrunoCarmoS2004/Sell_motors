@@ -1,6 +1,6 @@
 package br.com.c137.project.sellmotors.sync.services.impl;
 
-import br.com.c137.project.sellmotors.sync.dtos.LeadDto;
+import br.com.c137.project.sellmotors.sync.dtos.domains.LeadDto;
 import br.com.c137.project.sellmotors.sync.repositores.LeadRepository;
 import br.com.c137.project.sellmotors.sync.services.LeadService;
 import br.com.c137.project.sellmotors.sync.utils.MessageUtils;

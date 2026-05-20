@@ -1,5 +1,8 @@
 package br.com.c137.project.sellmotors.vehicleread.domains.vehicle;
 
+import br.com.c137.project.sellmotors.vehicleread.dtos.auxiliary.AnuncioAttribute;
+import br.com.c137.project.sellmotors.vehicleread.dtos.auxiliary.Location;
+import br.com.c137.project.sellmotors.vehicleread.dtos.auxiliary.Picture;
 import br.com.c137.project.sellmotors.vehicleread.enums.EntityStatus;
 import br.com.c137.project.sellmotors.vehicleread.enums.VehicleStatus;
 import lombok.AllArgsConstructor;
@@ -12,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -20,42 +24,38 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Document(collection = "vehicleDto")
-@TypeAlias("br.com.c137.project.sellmotors.sync.dtos.VehicleDto")
+@TypeAlias("br.com.c137.project.sellmotors.sync.dtos.domains.VehicleDto")
 public class VehicleDomain {
     @Id
-    private UUID id;
+    UUID id;
 
-    private String marca;
+    String title;
 
-    private String modelo;
+    String description;
 
-    private String versao;
+    String videoId;
 
-    private Integer anoModelo;
+    BigDecimal price;
 
-    private Integer anoFabricacao;
+    String listingTypeId;
 
-    private BigDecimal preco;
+    VehicleStatus statusVeiculo;
 
-    private Integer quilometragem;
+    List<String> channels;
 
-    private String tipoCombustivel;
+    List<AnuncioAttribute> attributes;
 
-    private String tipoTransmissao;
+    Location locations;
 
-    private String chassi;
+    List<Picture> pictures;
 
-    private String placa;
+    LocalDateTime deletedAt;
 
-    private VehicleStatus statusVeiculo;
+    LocalDateTime createdAt;
 
-    private LocalDateTime deletedAt;
+    LocalDateTime updatedAt;
 
-    private LocalDateTime createdAt;
+    EntityStatus entityStatus;
 
-    private LocalDateTime updatedAt;
-
-    private EntityStatus entityStatus;
-
-    private UUID createdBy;
+    UUID createdBy;
 }

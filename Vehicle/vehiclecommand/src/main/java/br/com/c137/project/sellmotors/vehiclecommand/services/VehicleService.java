@@ -47,15 +47,13 @@ public class VehicleService {
     }
 
     public VehicleGetDTO postVehicle(VehiclePostDTO vehiclePostDTO) {
-        vehicleValidation.placaExistsValidation(vehiclePostDTO.placa());
-        vehicleValidation.chassiExistisValidation(vehiclePostDTO.chassi());
+        //TODO FAZER AS VALIDAÇÕES CORRETAS POR ATRIBUTO DE VEICULO UNICO
         Vehicle vehicle = vehicleMapper.postToVehicle(vehiclePostDTO);
         return saveReturnAndSend(vehicle);
     }
 
     public VehicleGetDTO putVehicle(UUID id, VehiclePutDTO vehiclePutDTO) {
-        vehicleValidation.placaExistsValidation(vehiclePutDTO.placa());
-        vehicleValidation.chassiExistisValidation(vehiclePutDTO.chassi());
+        //TODO FAZER AS VALIDAÇÕES CORRETAS POR ATRIBUTO DE VEICULO UNICO
         Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new NotFoundException(getNotFoundMessage()));
         vehicle = vehicleMapper.putToVehicle(vehiclePutDTO, vehicle);
         return saveReturnAndSend(vehicle);

@@ -1,26 +1,21 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
-CREATE TABLE vehicle (
-     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-     marca VARCHAR(120) NOT NULL,
-     modelo VARCHAR(120) NOT NULL,
-     versao VARCHAR(120) NOT NULL,
-     ano_modelo INTEGER NOT NULL,
-     ano_fabricacao INTEGER NOT NULL,
-     preco NUMERIC(19, 2) NOT NULL,
-     quilometragem INTEGER NOT NULL,
-     tipo_combustivel VARCHAR(30) NOT NULL,
-     tipo_transmissao VARCHAR(30) NOT NULL,
-     chassi VARCHAR(17) NOT NULL UNIQUE,
-     placa VARCHAR(10) NOT NULL UNIQUE,
-     status_veiculo VARCHAR(30) NOT NULL,
-     entity_status VARCHAR(30),
-     deleted_at TIMESTAMP WITHOUT TIME ZONE,
-     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-     updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-     created_by UUID NOT NULL
+CREATE TABLE vehicles (
+                          id UUID PRIMARY KEY,
+                          title VARCHAR(255) NOT NULL,
+                          description TEXT,
+                          video_id VARCHAR(255),
+                          category_id VARCHAR(50),
+                          price NUMERIC(19, 2),
+                          currency_id VARCHAR(10),
+                          listing_type_id VARCHAR(50),
+                          available_quantity INTEGER,
+                          status_veiculo VARCHAR(50),
+                          attributes JSONB,
+                          channels JSONB,
+                          locations JSONB,
+                          pictures JSONB,
+                          created_at TIMESTAMP NOT NULL,
+                          updated_at TIMESTAMP NOT NULL,
+                          deleted_at TIMESTAMP,
+                          entity_status VARCHAR(50) NOT NULL DEFAULT 'ATIVO',
+                          created_by UUID NOT NULL
 );
-
--- Comentários para auxiliar na manutenção do banco
-COMMENT ON COLUMN vehicle.status_veiculo IS 'Armazena o enum VehicleStatus como String';
-COMMENT ON COLUMN vehicle.entity_status IS 'Armazena o enum EntityStatus como String (ATIVO, INATIVO, etc)';

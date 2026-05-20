@@ -1,16 +1,21 @@
 package br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.models;
 
+import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.enums.EntityStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-@Data
-@Entity
-@Table(name = "pictures")
-public class Picture {
+import java.time.LocalDateTime;
+import java.util.UUID;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+import static br.com.c137.project.sellmotors.vehiclecommand.utils.ServiceUtils.getUserIdFromToken;
 
-    private String source;
+public record Picture(
+
+        String source
+
+) {
+
+
 }

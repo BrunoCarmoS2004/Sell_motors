@@ -1,55 +1,62 @@
 package br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.dtos.posts;
 
 import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.enums.VehicleStatus;
+import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.models.AnuncioAttribute;
+import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.models.Location;
+import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.models.Picture;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
+import java.util.List;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 public record VehiclePostDTO(
-        @NotBlank(message = "A marca é obrigatória")
-        @Size(max = 120)
-        String marca,
+        @NotBlank(message = "O título é obrigatório")
+        @Size(min = 5, max = 100, message = "O título deve ter entre 5 e 100 caracteres")
+        String title,
 
-        @NotBlank(message = "O modelo é obrigatório")
-        @Size(max = 120)
-        String modelo,
+        @NotBlank(message = "A descrição é obrigatória")
+        String description,
 
-        @NotBlank(message = "A versão é obrigatória")
-        @Size(max = 120)
-        String versao,
+        String videoId, // Opcional, sem validação estrita de presença
 
-        @NotNull(message = "O ano do modelo é obrigatório")
-        @Min(value = 1800, message = "Ano do modelo inválido")
-        Integer anoModelo,
-
-        @NotNull(message = "O ano de fabricação é obrigatório")
-        @Min(value = 1800, message = "Ano de fabricação inválido")
-        Integer anoFabricacao,
+        @NotBlank(message = "A categoria é obrigatória")
+        String categoryId,
 
         @NotNull(message = "O preço é obrigatório")
-        @DecimalMin(value = "0.0", inclusive = false, message = "O preço deve ser maior que zero")
-        @Digits(integer = 17, fraction = 2)
-        BigDecimal preco,
+        @DecimalMin(value = "0.01", message = "O preço deve ser maior que zero")
+        BigDecimal price,
 
-        @NotNull(message = "A quilometragem é obrigatória")
-        @PositiveOrZero(message = "A quilometragem não pode ser negativa")
-        Integer quilometragem,
+        @NotBlank(message = "A moeda (currency_id) é obrigatória")
+        @Size(min = 3, max = 3, message = "A moeda deve ter exatamente 3 caracteres (Ex: BRL)")
+        String currencyId,
 
-        @NotBlank(message = "O tipo de combustível é obrigatório")
-        String tipoCombustivel,
+        @NotBlank(message = "O tipo de anúncio (listing_type_id) é obrigatório")
+        String listingTypeId,
 
-        @NotBlank(message = "O tipo de transmissão é obrigatório")
-        String tipoTransmissao,
-
-        @NotBlank(message = "O chassi (VIN) é obrigatório")
-        @Size(min = 17, max = 17, message = "O chassi deve ter exatamente 17 caracteres")
-        String chassi,
-
-        @NotBlank(message = "A placa é obrigatória")
-        @Pattern(regexp = "^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$", message = "Placa em formato inválido (Padrão Mercosul ou Antigo)")
-        String placa,
+        @NotNull(message = "A quantidade disponível é obrigatória")
+        @Min(value = 1, message = "A quantidade mínima deve ser pelo menos 1")
+        Integer availableQuantity,
 
         @NotNull(message = "O status do veículo é obrigatório")
-        VehicleStatus statusVeiculo
+        VehicleStatus statusVeiculo,
+
+        @NotNull(message = "O channel do veículo é obrigatório")
+        List<String> channels,
+
+        @NotNull(message = "Os atributos do veículo é obrigatório")
+        List<AnuncioAttribute> attributes,
+
+        @NotNull(message = "A localidade do veículo é obrigatório")
+        Location locations,
+
+        @NotNull(message = "As fotos do veículo é obrigatório")
+        List<Picture> pictures
 ) {
 }

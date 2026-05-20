@@ -1,6 +1,6 @@
 package br.com.c137.project.sellmotors.vehicleread.services;
 
-import br.com.c137.project.sellmotors.vehicleread.dtos.VehicleFullDTO;
+import br.com.c137.project.sellmotors.vehicleread.dtos.full.VehicleFullDTO;
 import br.com.c137.project.sellmotors.vehicleread.exceptions.NotFoundException;
 import br.com.c137.project.sellmotors.vehicleread.exceptions.TokenValidationException;
 import br.com.c137.project.sellmotors.vehicleread.repositories.VehicleRepository;

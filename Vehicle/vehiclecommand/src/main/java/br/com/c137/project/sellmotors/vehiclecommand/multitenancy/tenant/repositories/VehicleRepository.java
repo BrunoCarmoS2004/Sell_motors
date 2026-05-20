@@ -19,14 +19,6 @@ public interface VehicleRepository extends JpaRepository<Vehicle, UUID> {
 
     <T> Page<T> findBy(Pageable pageable, Class<T> type);
 
-    boolean existsByPlaca(String placa);
-
-    boolean existsByChassi(String chassi);
-
-    boolean existsByPlacaAndIdNot(String placa, UUID id);
-
-    boolean existsByChassiAndIdNot(String chassi, UUID id);
-
     @Transactional
     @Modifying
     @Query("UPDATE Vehicle v SET v.entityStatus = :entityStatus WHERE v.id = :id")

@@ -1,6 +1,6 @@
 package br.com.c137.project.sellmotors.vehicleread.controllers;
 
-import br.com.c137.project.sellmotors.vehicleread.dtos.VehicleFullDTO;
+import br.com.c137.project.sellmotors.vehicleread.dtos.full.VehicleFullDTO;
 import br.com.c137.project.sellmotors.vehicleread.responses.ResponsePayload;
 import br.com.c137.project.sellmotors.vehicleread.services.VehicleService;
 import br.com.c137.project.sellmotors.vehicleread.utils.MessageUtils;

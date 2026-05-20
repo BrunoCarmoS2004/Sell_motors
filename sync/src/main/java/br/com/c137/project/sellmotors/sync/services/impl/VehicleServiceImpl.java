@@ -1,6 +1,6 @@
 package br.com.c137.project.sellmotors.sync.services.impl;
 
-import br.com.c137.project.sellmotors.sync.dtos.VehicleDto;
+import br.com.c137.project.sellmotors.sync.dtos.domains.VehicleDto;
 import br.com.c137.project.sellmotors.sync.repositores.VehicleRepository;
 import br.com.c137.project.sellmotors.sync.services.VehicleService;
 import br.com.c137.project.sellmotors.sync.utils.MessageUtils;

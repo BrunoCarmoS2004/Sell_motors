@@ -1,7 +1,7 @@
 package br.com.c137.project.sellmotors.sync.listeners.impl;
 
-import br.com.c137.project.sellmotors.sync.dtos.LeadDto;
-import br.com.c137.project.sellmotors.sync.dtos.VehicleDto;
+import br.com.c137.project.sellmotors.sync.dtos.domains.LeadDto;
+import br.com.c137.project.sellmotors.sync.dtos.domains.VehicleDto;
 import br.com.c137.project.sellmotors.sync.listeners.ListenerConfig;
 import br.com.c137.project.sellmotors.sync.services.SyncService;
 import br.com.c137.project.sellmotors.sync.utils.SyncLogger;

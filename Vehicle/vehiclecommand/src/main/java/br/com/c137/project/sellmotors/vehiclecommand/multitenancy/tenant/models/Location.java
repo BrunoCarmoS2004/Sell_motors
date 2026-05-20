@@ -1,23 +1,21 @@
 package br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.models;
 
+import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.enums.EntityStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-@Data
-@Entity
-@Table(name = "tb_locations")
-public class Location {
+import java.time.LocalDateTime;
+import java.util.UUID;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+import static br.com.c137.project.sellmotors.vehiclecommand.utils.ServiceUtils.getUserIdFromToken;
 
-    @Column(name = "address_line")
-    private String addressLine;
+public record Location(
+        String addressLine,
 
-    @Column(name = "zip_code")
-    private String zipCode;
+        String zipCode,
 
-    @Column(name = "city_id")
-    private String cityId;
+        City city
+) {
 }

@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Document(collection = "leadDto")
-@TypeAlias("br.com.c137.project.sellmotors.sync.dtos.LeadDto")
+@TypeAlias("br.com.c137.project.sellmotors.sync.dtos.domains.LeadDto")
 public class LeadDomain {
 
     @Id
