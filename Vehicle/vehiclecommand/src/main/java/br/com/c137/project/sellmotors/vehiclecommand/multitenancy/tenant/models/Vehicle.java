@@ -1,87 +1,57 @@
-package br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.models;
-
-import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.enums.EntityStatus;
-import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.enums.VehicleStatus;
+import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.models.AnuncioAttribute;
+import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.models.Location;
+import br.com.c137.project.sellmotors.vehiclecommand.multitenancy.tenant.models.Picture;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.List;
 
-import static br.com.c137.project.sellmotors.vehiclecommand.utils.ServiceUtils.getUserIdFromToken;
-
-@Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
+@Table(name = "vehicles")
 public class Vehicle {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(nullable = false, length = 120)
-    private String marca;
+    private String title;
 
-    @Column(nullable = false, length = 120)
-    private String modelo;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
-    @Column(nullable = false, length = 120)
-    private String versao;
+    @ElementCollection
+    @CollectionTable(name = "anuncio_channels", joinColumns = @JoinColumn(name = "anuncio_id"))
+    @Column(name = "channel")
+    private List<String> channels;
 
-    @Column(name = "ano_modelo", nullable = false)
-    private Integer anoModelo;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "anuncio_id")
+    private List<Picture> pictures;
 
-    @Column(name = "ano_fabricacao", nullable = false)
-    private Integer anoFabricacao;
+    @Column(name = "video_id")
+    private String videoId;
 
-    @Column(nullable = false, precision = 19, scale = 2)
-    private BigDecimal preco;
+    @Column(name = "category_id")
+    private String categoryId;
 
-    @Column(nullable = false)
-    private Integer quilometragem;
+    // Convertido para BigDecimal por boas práticas com moedas, mesmo vindo como String no JSON
+    private BigDecimal price;
 
-    @Column(name = "tipo_combustivel", nullable = false, length = 30)
-    private String tipoCombustivel;
+    @Column(name = "currency_id")
+    private String currencyId;
 
-    @Column(name = "tipo_transmissao", nullable = false, length = 30)
-    private String tipoTransmissao;
+    @Column(name = "listing_type_id")
+    private String listingTypeId;
 
-    @Column(nullable = false, unique = true, length = 17)
-    private String chassi;
+    @Column(name = "available_quantity")
+    private Integer availableQuantity;
 
-    @Column(nullable = false, unique = true, length = 10)
-    private String placa;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location location;
 
-    @Column(nullable = false, length = 30, name = "status_veiculo")
-    @Enumerated(EnumType.STRING)
-    private VehicleStatus statusVeiculo;
-
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @Column(name = "created_by")
-    private UUID createdBy;
-
-    @Column(name = "entity_status")
-    @Enumerated(EnumType.STRING)
-    private EntityStatus entityStatus;
-
-    @PrePersist
-    public void onCreate() {
-        this.createdBy = getUserIdFromToken();
-        this.entityStatus = EntityStatus.ATIVO;
-    }
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "anuncio_id")
+    private List<AnuncioAttribute> attributes;
 }
