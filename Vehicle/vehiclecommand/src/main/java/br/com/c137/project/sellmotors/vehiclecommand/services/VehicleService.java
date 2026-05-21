@@ -49,6 +49,9 @@ public class VehicleService {
     public VehicleGetDTO postVehicle(VehiclePostDTO vehiclePostDTO) {
         //TODO FAZER AS VALIDAÇÕES CORRETAS POR ATRIBUTO DE VEICULO UNICO
         Vehicle vehicle = vehicleMapper.postToVehicle(vehiclePostDTO);
+
+        vehicle.setEntityStatus(EntityStatus.PENDENTE_INTEGRACAO);
+        
         return saveReturnAndSend(vehicle);
     }
 

@@ -3,12 +3,14 @@ package br.com.c137.project.sellmotors.integrations.services.mercadolivre.impl;
 import br.com.c137.project.sellmotors.integrations.exceptions.MercadoLivreException;
 import br.com.c137.project.sellmotors.integrations.exceptions.NotFoundException;
 import br.com.c137.project.sellmotors.integrations.multitenancy.mastertenant.dtos.gets.MlTokenResponse;
+import br.com.c137.project.sellmotors.integrations.multitenancy.mastertenant.dtos.gets.VehicleGetDTO;
 import br.com.c137.project.sellmotors.integrations.multitenancy.mastertenant.enums.PlataformNames;
 import br.com.c137.project.sellmotors.integrations.multitenancy.mastertenant.models.UserIntegration;
 import br.com.c137.project.sellmotors.integrations.multitenancy.mastertenant.repositories.UserIntegrationRepository;
 import br.com.c137.project.sellmotors.integrations.services.mercadolivre.UserIntegrationService;
 import br.com.c137.project.sellmotors.integrations.utils.MessageUtils;
 import br.com.c137.project.sellmotors.integrations.utils.ServiceUtils;
+import br.com.c137.project.sellmotors.integrations.utils.SyncLogger;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,6 +22,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -32,6 +37,7 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
     private final MessageUtils messageUtils;
 
     private final String URL_BASE_MERCADO_LIVRE = "https://api.mercadolibre.com/oauth/token";
+    private static final String URL_BASE_MERCADO_LIVRE_ITENS = "https://api.mercadolibre.com/items";
 
     public UserIntegrationServiceImpl(UserIntegrationRepository userIntegrationRepository, MessageUtils messageUtils) {
         this.userIntegrationRepository = userIntegrationRepository;
@@ -103,6 +109,81 @@ public class UserIntegrationServiceImpl implements UserIntegrationService {
             throw new RuntimeException("Erro ao obter token do ML: " + e.getMessage());
         }
     }
+
+    @Override
+    public void postVehicleMercadoLivre(VehicleGetDTO dto) {
+        UUID tenantId = dto.createdBy();
+
+        UserIntegration integration = userIntegrationRepository
+                .findByTenantIdAndPlatformName(tenantId, PlataformNames.MERCADO_LIVRE)
+                .orElseThrow(() -> new NotFoundException(messageUtils.getMessage("user.integration.not-found")));
+
+        if(integration.getExpiresAt() != null && integration.getExpiresAt().isBefore(LocalDateTime.now())) {
+            getRefreshTokenMercadoLivre(tenantId);
+
+            integration = userIntegrationRepository
+                    .findByTenantIdAndPlatformName(tenantId, PlataformNames.MERCADO_LIVRE)
+                    .orElseThrow(() -> new NotFoundException(messageUtils.getMessage("user.integration.not-found")));
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(integration.getAccessToken());
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+
+        List<Map<String, Object>> pictures = dto.pictures().stream()
+                .map(picture -> Map.<String, Object>of("source", picture.source()))
+                .toList();
+
+        Map<String, Object> city = Map.of(
+                "id", dto.locations().city().getId()
+        );
+
+        Map<String, Object> location = new HashMap<>();
+        location.put("address_line", dto.locations().addressLine());
+        location.put("zip_code", dto.locations().zipCode());
+        location.put("city", city);
+
+        List<Map<String, Object>> attributes = dto.attributes().stream()
+                .map(attribute -> Map.<String, Object>of(
+                        "id", attribute.id(),
+                        "value_name", attribute.valueName()
+                ))
+                .toList();
+
+
+
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("title", dto.title());
+        payload.put("description", dto.description());
+        payload.put("channels", List.of("marketplace"));
+        payload.put("video_id", dto.videoId());
+        payload.put("category_id", "MLB1744");
+        payload.put("price", dto.price());
+        payload.put("currency_id", "BRL");
+        payload.put("listing_type_id", dto.listingTypeId());
+        payload.put("available_quantity", 1);
+        payload.put("pictures", pictures);
+        payload.put("location", location);
+        payload.put("attributes", attributes);
+
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.postForEntity(
+                    URL_BASE_MERCADO_LIVRE_ITENS,
+                    request,
+                    String.class
+            );
+
+            SyncLogger.info("Anúncio criado no Mercado Livre: " + response.getBody());
+        } catch (Exception e) {
+            SyncLogger.error("Erro ao publicar no Mercado Livre: " + e.getMessage());
+            throw new MercadoLivreException("Erro ao publicar no Mercado Livre");
+        }
+
+    }
+
 
     private boolean tokenType(String grantType) {
         return grantType.equals("authorization_code");

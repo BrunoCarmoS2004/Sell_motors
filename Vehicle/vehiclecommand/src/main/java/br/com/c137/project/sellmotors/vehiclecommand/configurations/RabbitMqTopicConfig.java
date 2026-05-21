@@ -26,12 +26,23 @@ public class RabbitMqTopicConfig {
     }
 
     @Bean
-    public Binding bindingLead(Queue leadQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(leadQueue).to(exchange).with("vehicle.#");
+    public Binding bindingVehicle(Queue vehicleQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(vehicleQueue).to(exchange).with("vehicle.#");
     }
 
     @Bean
-    public Queue leadQueue() {
+    public Binding bindingVehicleIntegrations(Queue vehicleIntegrationsQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(vehicleIntegrationsQueue).to(exchange).with("vehicle.#");
+    }
+
+
+    @Bean
+    public Queue vehicleQueue() {
         return new Queue("vehicleQueue", true);
+    }
+
+    @Bean
+    public Queue vehicleIntegrationsQueue() {
+        return new Queue("vehicleIntegrationsQueue", true);
     }
 }
