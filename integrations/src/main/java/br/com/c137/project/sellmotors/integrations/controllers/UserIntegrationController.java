@@ -13,21 +13,5 @@ import java.util.UUID;
 @RequestMapping("/integration")
 public class UserIntegrationController {
 
-    private final UserIntegrationService userIntegrationService;
 
-    public UserIntegrationController(UserIntegrationService userIntegrationService) {
-        this.userIntegrationService = userIntegrationService;
-    }
-
-    @GetMapping("/mercadolivre/token/{tgCode}")
-    ResponseEntity<Void> getTokenMercadoLivre(@PathVariable String tgCode) {
-        userIntegrationService.getTokenMercadoLivre(tgCode);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/mercadolivre/refreshtoken/{tenantId}")
-    ResponseEntity<Void> getRefreshTokenMercadoLivre(@PathVariable UUID tenantId) {
-        userIntegrationService.getRefreshTokenMercadoLivre(tenantId);
-        return ResponseEntity.ok().build();
-    }
 }
