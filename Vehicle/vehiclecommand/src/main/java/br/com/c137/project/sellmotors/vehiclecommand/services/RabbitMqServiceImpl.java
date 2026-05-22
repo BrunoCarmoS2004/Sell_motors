@@ -28,9 +28,7 @@ public class RabbitMqServiceImpl implements BrokerService {
     }
 
     @Override
-    public void send(String type, Object data) {
-        String routingKey = type + ".#";
-
+    public void send(String routingKey, Object data) {
         try {
             String jsonData = objectMapper.writeValueAsString(data);
             rabbitTemplate.convertAndSend(rabbitMqTopicConfig.exchangeName, routingKey, jsonData, message -> {

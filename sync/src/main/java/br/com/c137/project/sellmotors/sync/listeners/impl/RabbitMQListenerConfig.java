@@ -32,7 +32,7 @@ public class RabbitMQListenerConfig implements ListenerConfig {
 
     @Bean
     public Queue vehicleQueue() {
-        return new Queue("vehicleQueue", true);
+        return new Queue("vehicleSyncQueue", true);
     }
 
     @RabbitListener(queues = "leadQueue")
@@ -50,7 +50,7 @@ public class RabbitMQListenerConfig implements ListenerConfig {
 
     }
 
-    @RabbitListener(queues = "vehicleQueue")
+    @RabbitListener(queues = "vehicleSyncQueue")
     @Override
     public void listenToVehicleQueue(String message) {
         try {

@@ -46,6 +46,17 @@ public class VehicleControllers {
         );
     }
 
+    @PostMapping("/send/integration/{id}")
+    public ResponseEntity<ResponsePayload<String>> sendVehicleToIntegrations(@PathVariable UUID id) {
+        vehicleService.sendVehicleToIntegrations(id);
+        return createResponse(
+                HttpStatus.OK,
+                null,
+                null,
+                messageUtils.getMessage("vehicle.send.integration")
+        );
+    }
+
     @PostMapping
     public ResponseEntity<ResponsePayload<VehicleGetDTO>> postVehicle(@RequestBody VehiclePostDTO vehiclePostDTO) {
         VehicleGetDTO vehicleGetDTO = vehicleService.postVehicle(vehiclePostDTO);

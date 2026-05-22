@@ -2,10 +2,7 @@ package br.com.c137.project.sellmotors.vehiclecommand.configurations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,19 +23,27 @@ public class RabbitMqTopicConfig {
     }
 
     @Bean
-    public Binding bindingVehicle(Queue vehicleQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(vehicleQueue).to(exchange).with("vehicle.#");
+    public Declarables bindingSyncAndIntegration(
+            Queue vehicleQueue,
+            Queue vehicleIntegrationsQueue,
+            TopicExchange exchange
+    ){
+        String routingKey = "vehicle.sync.integration.#";
+        return new Declarables(
+                BindingBuilder.bind(vehicleQueue).to(exchange).with(routingKey),
+                BindingBuilder.bind(vehicleIntegrationsQueue).to(exchange).with(routingKey)
+        );
     }
 
     @Bean
     public Binding bindingVehicleIntegrations(Queue vehicleIntegrationsQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(vehicleIntegrationsQueue).to(exchange).with("vehicle.#");
+        return BindingBuilder.bind(vehicleIntegrationsQueue).to(exchange).with("vehicle.integration.#");
     }
 
 
     @Bean
     public Queue vehicleQueue() {
-        return new Queue("vehicleQueue", true);
+        return new Queue("vehicleSyncQueue", true);
     }
 
     @Bean

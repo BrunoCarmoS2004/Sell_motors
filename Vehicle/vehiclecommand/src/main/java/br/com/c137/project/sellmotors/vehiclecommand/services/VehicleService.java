@@ -67,6 +67,11 @@ public class VehicleService {
         updateEntityStatus(EntityStatus.DELETADO, id);
     }
 
+    public void sendVehicleToIntegrations(UUID id) {
+        VehicleGetDTO vehicleGetDTO = getVehicleById(id);
+        sendVehicleIntegrationQueue(vehicleGetDTO);
+    }
+
     public void inativarVehicle(UUID id) {
         vehicleValidation.vehicleExistsValidation(id);
         updateEntityStatus(EntityStatus.INATIVO, id);
@@ -82,11 +87,15 @@ public class VehicleService {
 
     private VehicleGetDTO saveReturnAndSend(Vehicle vehicle) {
         VehicleGetDTO vehicleGetDTO = vehicleMapper.vehicleToVehicleGetDTO(vehicleRepository.save(vehicle));
-        sendVehicleToQueue(vehicleGetDTO);
+        sendVehicleSyncIntegrationQueue(vehicleGetDTO);
         return vehicleGetDTO;
     }
 
-    private void sendVehicleToQueue(VehicleGetDTO vehicleGetDTO) {
-        brokerService.send("vehicle", vehicleGetDTO);
+    private void sendVehicleSyncIntegrationQueue(VehicleGetDTO vehicleGetDTO) {
+        brokerService.send("vehicle.sync.integration", vehicleGetDTO);
+    }
+
+    private void sendVehicleIntegrationQueue(VehicleGetDTO vehicleGetDTO) {
+        brokerService.send("vehicle.integration", vehicleGetDTO);
     }
 }
